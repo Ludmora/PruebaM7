@@ -2,14 +2,17 @@
     <v-container>
         <h1 class="text-center mb-4">Administración de Cursos</h1>
 
-
         <v-btn color="primary" class="mb-4" @click="openDialog">
             <v-icon left>mdi-plus</v-icon>
             Agregar Curso
         </v-btn>
 
         <v-data-table v-if="cursos.length > 0" :headers="tableHeaders" :items="cursos" item-key="id" class="elevation-1"
-            item-class="course-row" dense>
+            item-class="course-row" dense
+            :items-per-page="itemsPerPage"
+            :footer-props="{
+                'items-per-page-text': 'Cursos por página'
+            }">
             <template v-slot:item="{ item }">
                 <tr>
                     <td>{{ item.nombre }}</td>
@@ -33,7 +36,6 @@
         <v-alert v-else type="info" dismissible>
             No hay cursos disponibles. Usa el botón "Agregar Curso" para crear uno nuevo.
         </v-alert>
-
 
         <v-dialog v-model="dialog" persistent max-width="500px">
             <v-card>
@@ -81,7 +83,7 @@ export default {
                 img: "",
                 cupos: "",
             },
-           
+            itemsPerPage: 5,
             tableHeaders: [
                 { text: "Nombre", align: "start", key: "nombre" },
                 { text: "Duración", align: "start", key: "duracion" },
@@ -139,7 +141,6 @@ export default {
         },
     },
     mounted() {
-        
         this.$store.dispatch('fetchCursos');
     }
 };
